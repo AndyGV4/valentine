@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="Una invitación especial de San Valentín para Charlie 💕">
+    <title>💕 Para Charlie - San Valentín 2025 💕</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            position: relative;
+        }
+
+        /* Canvas para animaciones de fondo */
+        #backgroundCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Pantalla de bienvenida */
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            padding: 20px;
+        }
+
+        .screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.9);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 50px 40px;
+            max-width: 550px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                padding: 40px 30px;
+            }
+        }
+
+        /* Decoraciones en la tarjeta */
+        .card-decoration {
+            position: absolute;
+            font-size: 100px;
+            opacity: 0.05;
+            pointer-events: none;
+        }
+
+        .decoration-1 { top: -30px; left: -30px; transform: rotate(-15deg); }
+        .decoration-2 { top: -20px; right: -30px; transform: rotate(15deg); }
+        .decoration-3 { bottom: -30px; left: -20px; transform: rotate(25deg); }
+        .decoration-4 { bottom: -20px; right: -30px; transform: rotate(-25deg); }
+
+        /* Pantalla 1 - Bienvenida */
+        .welcome-emoji {
+            font-size: 120px;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 3rem;
+            color: #764ba2;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        /* Botón principal */
+        .btn-primary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.4);
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            touch-action: manipulation;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-primary:active::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(245, 87, 108, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .btn-primary {
+                padding: 15px 40px;
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Pantalla 2 - Cuenta regresiva */
+        .countdown {
+            margin: 40px 0;
+        }
+
+        .countdown-title {
+            font-size: 1.3rem;
+            color: #764ba2;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        .hearts-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .heart {
+            font-size: 50px;
+            animation: heartbeat 1.5s ease-in-out infinite;
+            opacity: 0.3;
+        }
+
+        .heart.active {
+            opacity: 1;
+            animation: heartbeat 0.8s ease-in-out infinite, pulse 0.8s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            10%, 30% { transform: scale(1.1); }
+            20% { transform: scale(0.95); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { filter: drop-shadow(0 0 5px #f5576c); }
+            50% { filter: drop-shadow(0 0 20px #f5576c); }
+        }
+
+        /* Pantalla 3 - La pregunta */
+        .question-emoji {
+            font-size: 100px;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .question-text {
+            font-size: 1.8rem;
+            color: #764ba2;
+            margin-bottom: 15px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 768px) {
+            .question-text {
+                font-size: 1.5rem;
+            }
+        }
+
+        .question-subtext {
+            font-size: 1.1rem;
+            color: #888;
+            margin-bottom: 40px;
+            font-weight: 300;
+            font-style: italic;
+        }
+
+        /* Botones de respuesta */
+        .answer-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-answer {
+            padding: 18px 45px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            touch-action: manipulation;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-answer::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-answer:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        @media (max-width: 768px) {
+            .btn-answer {
+                padding: 15px 35px;
+                font-size: 1.2rem;
+            }
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .btn-yes:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(245, 87, 108, 0.4);
+        }
+
+        .btn-no {
+            background: linear-gradient(135deg, #a8b8d8 0%, #7d8da8 100%);
+            color: white;
+        }
+
+        .btn-no:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(125, 141, 168, 0.4);
+        }
+
+        /* Pantalla 4 - Respuesta SÍ */
+        .celebration {
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .celebration-emoji {
+            font-size: 130px;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: celebrate 1s ease-in-out infinite;
+        }
+
+        @keyframes celebrate {
+            0%, 100% { transform: rotate(-10deg) scale(1); }
+            50% { transform: rotate(10deg) scale(1.1); }
+        }
+
+        .celebration-title {
+            font-family: 'Pacifico', cursive;
+            font-size: 2.5rem;
+            color: #f5576c;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .celebration-title {
+                font-size: 2rem;
+            }
+        }
+
+        .celebration-message {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .date-info {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            padding: 20px 30px;
+            border-radius: 20px;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(253, 203, 110, 0.3);
+        }
+
+        .date-info p {
+            font-size: 1.1rem;
+            color: #d35400;
+            font-weight: 600;
+        }
+
+        /* Pantalla 5 - Respuesta NO */
+        .sadness {
+            animation: slideIn 0.6s ease-out;
+        }
+
+        .sadness-emoji {
+            font-size: 130px;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: sad-shake 2s ease-in-out infinite;
+        }
+
+        @keyframes sad-shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .sadness-title {
+            font-family: 'Pacifico', cursive;
+            font-size: 2.5rem;
+            color: #7d8da8;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .sadness-title {
+                font-size: 2rem;
+            }
+        }
+
+        .sadness-message {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        /* Botón secundario */
+        .btn-secondary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            touch-action: manipulation;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary:active {
+            transform: translateY(0);
+        }
+
+        /* Confeti */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            pointer-events: none;
+            animation: confetti-fall 3s linear forwards;
+            z-index: 1000;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Loading spinner */
+        .spinner {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(118, 75, 162, 0.3);
+            border-top-color: #764ba2;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Canvas para animaciones de fondo -->
+    <canvas id="backgroundCanvas"></canvas>
+
+    <div class="container">
+        <!-- Pantalla 1: Bienvenida -->
+        <div class="screen" id="screen1">
+            <div class="card">
+                <div class="card-decoration decoration-1">💕</div>
+                <div class="card-decoration decoration-2">✨</div>
+                <div class="card-decoration decoration-3">💝</div>
+                <div class="card-decoration decoration-4">🌹</div>
+                
+                <div class="welcome-emoji">💌</div>
+                <h1>Hola Charlie</h1>
+                <p class="subtitle">Tengo algo especial que preguntarte...</p>
+                <button class="btn-primary" id="btnStart">Abrir 💕</button>
+            </div>
+        </div>
+
+        <!-- Pantalla 2: Cuenta regresiva -->
+        <div class="screen hidden" id="screen2">
+            <div class="card">
+                <div class="card-decoration decoration-1">💖</div>
+                <div class="card-decoration decoration-2">💫</div>
+                
+                <div class="countdown">
+                    <p class="countdown-title">Preparando algo especial para ti...</p>
+                    <div class="hearts-container">
+                        <span class="heart">💗</span>
+                        <span class="heart">💗</span>
+                        <span class="heart">💗</span>
+                        <span class="heart">💗</span>
+                        <span class="heart">💗</span>
+                    </div>
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pantalla 3: La pregunta -->
+        <div class="screen hidden" id="screen3">
+            <div class="card">
+                <div class="card-decoration decoration-1">🌟</div>
+                <div class="card-decoration decoration-2">💝</div>
+                <div class="card-decoration decoration-3">✨</div>
+                <div class="card-decoration decoration-4">💕</div>
+                
+                <div class="question-emoji">💐</div>
+                <h1>Charlie</h1>
+                <p class="question-text">¿Quieres ser mi San Valentín?</p>
+                <p class="question-subtext">Este 14 de febrero sería perfecto contigo 💕</p>
+                
+                <div class="answer-buttons">
+                    <button class="btn-answer btn-yes" id="btnYes">¡Sí, claro! 💕</button>
+                    <button class="btn-answer btn-no" id="btnNo">No puedo 💔</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pantalla 4: Respuesta SÍ -->
+        <div class="screen hidden" id="screen4">
+            <div class="card celebration">
+                <div class="card-decoration decoration-1">🎉</div>
+                <div class="card-decoration decoration-2">🎊</div>
+                <div class="card-decoration decoration-3">✨</div>
+                <div class="card-decoration decoration-4">💫</div>
+                
+                <div class="celebration-emoji">🥰</div>
+                <h2 class="celebration-title">¡Qué felicidad!</h2>
+                <p class="celebration-message">
+                    No puedo esperar para celebrar este día especial contigo. 
+                    Será inolvidable 💕
+                </p>
+                
+                <div class="date-info">
+                    <p>📅 14 de Febrero, 2025</p>
+                    <p style="margin-top: 10px;">✨ Un día mágico nos espera ✨</p>
+                </div>
+                
+                <button class="btn-secondary" id="btnRestart1">Volver al inicio</button>
+            </div>
+        </div>
+
+        <!-- Pantalla 5: Respuesta NO -->
+        <div class="screen hidden" id="screen5">
+            <div class="card sadness">
+                <div class="card-decoration decoration-1">💔</div>
+                <div class="card-decoration decoration-2">🥺</div>
+                
+                <div class="sadness-emoji">😢</div>
+                <h2 class="sadness-title">Oh no...</h2>
+                <p class="sadness-message">
+                    Entiendo... Pero si cambias de opinión, 
+                    siempre estaré aquí esperando 💙
+                </p>
+                <p class="sadness-message" style="font-size: 1rem; color: #999;">
+                    (¿Segura que no quieres reconsiderarlo? 🥺)
+                </p>
+                
+                <button class="btn-secondary" id="btnRestart2">Volver a pensar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let currentScreen = 1;
+        const totalScreens = 5;
+
+        // Canvas para animaciones de fondo
+        const canvas = document.getElementById('backgroundCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Partículas de fondo
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+                this.opacity = Math.random() * 0.5 + 0.3;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+
+            draw() {
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        const particles = [];
+        for (let i = 0; i < 50; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // Navegación entre pantallas
+        function showScreen(screenNumber) {
+            for (let i = 1; i <= totalScreens; i++) {
+                const screen = document.getElementById(`screen${i}`);
+                if (i === screenNumber) {
+                    screen.classList.remove('hidden');
+                } else {
+                    screen.classList.add('hidden');
+                }
+            }
+            currentScreen = screenNumber;
+        }
+
+        // Animación de corazones en pantalla 2
+        function animateHearts() {
+            const hearts = document.querySelectorAll('.heart');
+            let index = 0;
+            
+            const interval = setInterval(() => {
+                if (index < hearts.length) {
+                    hearts[index].classList.add('active');
+                    index++;
+                } else {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        showScreen(3);
+                    }, 500);
+                }
+            }, 300);
+        }
+
+        // Crear confeti
+        function createConfetti() {
+            const colors = ['#f093fb', '#f5576c', '#4facfe', '#00f2fe', '#ffd89b', '#fdcb6e'];
+            const confettiCount = 80;
+            
+            for (let i = 0; i < confettiCount; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    confetti.style.animationDelay = (Math.random() * 0.5) + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => {
+                        if (confetti.parentNode) {
+                            confetti.parentNode.removeChild(confetti);
+                        }
+                    }, 3500);
+                }, i * 20);
+            }
+        }
+
+        // Event Listeners
+        document.getElementById('btnStart').addEventListener('click', function(e) {
+            e.preventDefault();
+            showScreen(2);
+            animateHearts();
+        });
+
+        document.getElementById('btnStart').addEventListener('touchend', function(e) {
+            e.preventDefault();
+            showScreen(2);
+            animateHearts();
+        });
+
+        document.getElementById('btnYes').addEventListener('click', function(e) {
+            e.preventDefault();
+            showScreen(4);
+            createConfetti();
+        });
+
+        document.getElementById('btnYes').addEventListener('touchend', function(e) {
+            e.preventDefault();
+            showScreen(4);
+            createConfetti();
+        });
+
+        document.getElementById('btnNo').addEventListener('click', function(e) {
+            e.preventDefault();
+            showScreen(5);
+        });
+
+        document.getElementById('btnNo').addEventListener('touchend', function(e) {
+            e.preventDefault();
+            showScreen(5);
+        });
+
+        document.getElementById('btnRestart1').addEventListener('click', function(e) {
+            e.preventDefault();
+            showScreen(1);
+        });
+
+        document.getElementById('btnRestart1').addEventListener('touchend', function(e) {
+            e.preventDefault();
+            showScreen(1);
+        });
+
+        document.getElementById('btnRestart2').addEventListener('click', function(e) {
+            e.preventDefault();
+            showScreen(3);
+        });
+
+        document.getElementById('btnRestart2').addEventListener('touchend', function(e) {
+            e.preventDefault();
+            showScreen(3);
+        });
+    </script>
+</body>
+</html>
